@@ -92,7 +92,9 @@ var makeMovement = function(elem, steps, isForward, options) {
       return;
     }
 
-    var diff = isForward ? -options.digitHeight: options.digitHeight;
+    var diff = -options.digitHeight;
+    if(options.gravityForward) 
+	diff = isForward ? -options.digitHeight: options.digitHeight;
     margin(elem, initialPos + (x * diff));
   }, options.stepTime / steps);
 };
@@ -166,7 +168,7 @@ var parseRelativeDate = function(form, options) {
       format = format.substr(3);
   }
   // return our constructed date object
-  return new Date([m, d, y].join('/') + ' ' + [h, mm, s].map(pad).join(':') + ' GMT-0900');
+  return new Date([m, d, y].join('/') + ' ' + [h, mm, s].map(pad).join(':') + now.getTimezoneOffset());
 };
 
 
@@ -202,6 +204,7 @@ jQuery.fn.countdown = function(userOptions) {
     digitHeight: 90,
     timerEnd: function(){},
     image: "digits.png",
+    gravityForward: false,
     continuous: false
   };
   $.extend(options, userOptions);
